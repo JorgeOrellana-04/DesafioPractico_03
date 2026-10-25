@@ -1,0 +1,10 @@
+﻿namespace Desafio_03.Models;
+
+public class CientificoEspecialidad
+{
+    public int CientificoId { get; set; }
+    public Cientifico Cientifico { get; set; } = null!;
+
+    public int EspecialidadId { get; set; }
+    public Especialidad Especialidad { get; set; } = null!;
+}

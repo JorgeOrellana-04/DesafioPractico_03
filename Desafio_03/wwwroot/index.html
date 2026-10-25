@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente Completo - Científicos API</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light p-4">
+    <div class="container">
+        <h2 class="mb-4 text-primary fw-bold">Sistema de Gestión Científica (Cliente API)</h2>
+
+        <!-- Navegación por pestañas -->
+        <ul class="nav nav-tabs mb-4" id="apiTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active fw-bold" id="cientificos-tab" data-bs-toggle="tab" data-bs-target="#cientificos-pane">Científicos</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold" id="especialidades-tab" data-bs-toggle="tab" data-bs-target="#especialidades-pane">Especialidades</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold" id="descubrimientos-tab" data-bs-toggle="tab" data-bs-target="#descubrimientos-pane">Descubrimientos</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold" id="investigaciones-tab" data-bs-toggle="tab" data-bs-target="#investigaciones-pane">Investigaciones</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="apiTabsContent">
+
+            <!-- Pestaña 1: Científicos -->
+            <div class="tab-pane fade show active" id="cientificos-pane">
+                <div class="card p-3 mb-4 shadow-sm">
+                    <h5>Registrar Científico (Mínimo 20 años)</h5>
+                    <form id="cientificoForm" class="row g-3 mt-1">
+                        <div class="col-md-3"><input type="text" id="cNombre" class="form-control" placeholder="Nombre" required></div>
+                        <div class="col-md-3"><input type="text" id="cApellido" class="form-control" placeholder="Apellido" required></div>
+                        <div class="col-md-3"><input type="text" id="cNacionalidad" class="form-control" placeholder="Nacionalidad" required></div>
+                        <div class="col-md-3"><input type="email" id="cEmail" class="form-control" placeholder="Email" required></div>
+                        <div class="col-md-4"><input type="date" id="cFechaNac" class="form-control" required></div>
+                        <div class="col-md-5">
+                            <select id="cEspecialidadesSelect" class="form-select" multiple size="1"></select>
+                            <small class="text-muted">Mantenga presionado Ctrl para seleccionar varias especialidades.</small>
+                        </div>
+                        <div class="col-md-3"><button type="submit" class="btn btn-primary w-100">Guardar Científico</button></div>
+                    </form>
+                </div>
+                <div class="card p-3 shadow-sm">
+                    <h5>Listado de Científicos</h5>
+                    <table class="table table-striped align-middle mt-2">
+                        <thead><tr><th>ID</th><th>Nombre Completo</th><th>Nacionalidad</th><th>Email</th><th>Especialidades</th><th>Acciones</th></tr></thead>
+                        <tbody id="tablaCientificos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pestaña 2: Especialidades -->
+            <div class="tab-pane fade" id="especialidades-pane">
+                <div class="card p-3 mb-4 shadow-sm">
+                    <h5>Registrar Especialidad</h5>
+                    <form id="especialidadForm" class="row g-3 mt-1">
+                        <div class="col-md-4"><input type="text" id="eNombre" class="form-control" placeholder="Nombre de la Especialidad" required></div>
+                        <div class="col-md-6"><input type="text" id="eDescripcion" class="form-control" placeholder="Descripción"></div>
+                        <div class="col-md-2"><button type="submit" class="btn btn-success w-100">Guardar</button></div>
+                    </form>
+                </div>
+                <div class="card p-3 shadow-sm">
+                    <h5>Catálogo de Especialidades</h5>
+                    <table class="table table-striped align-middle mt-2">
+                        <thead><tr><th>ID</th><th>Especialidad</th><th>Descripción</th></tr></thead>
+                        <tbody id="tablaEspecialidades"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pestaña 3: Descubrimientos -->
+            <div class="tab-pane fade" id="descubrimientos-pane">
+                <div class="card p-3 mb-4 shadow-sm">
+                    <h5>Registrar Descubrimiento</h5>
+                    <form id="descubrimientoForm" class="row g-3 mt-1">
+                        <div class="col-md-3"><input type="text" id="dTitulo" class="form-control" placeholder="Título" required></div>
+                        <div class="col-md-3"><input type="text" id="dLugar" class="form-control" placeholder="Lugar"></div>
+                        <div class="col-md-3"><input type="date" id="dFecha" class="form-control" required></div>
+                        <div class="col-md-3">
+                            <select id="dCientificoSelect" class="form-select" required>
+                                <option value="">Científico Autor...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-9"><input type="text" id="dDescripcion" class="form-control" placeholder="Descripción breve"></div>
+                        <div class="col-md-3"><button type="submit" class="btn btn-warning w-100 text-dark font-weight-bold">Guardar Descubrimiento</button></div>
+                    </form>
+                </div>
+                <div class="card p-3 shadow-sm">
+                    <h5>Listado de Descubrimientos</h5>
+                    <table class="table table-striped align-middle mt-2">
+                        <thead><tr><th>ID</th><th>Título</th><th>Lugar</th><th>Fecha</th><th>Autor</th><th>Acciones</th></tr></thead>
+                        <tbody id="tablaDescubrimientos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pestaña 4: Investigaciones -->
+            <div class="tab-pane fade" id="investigaciones-pane">
+                <div class="card p-3 mb-4 shadow-sm">
+                    <h5>Registrar Investigación</h5>
+                    <form id="investigacionForm" class="row g-3 mt-1">
+                        <div class="col-md-3"><input type="text" id="iTitulo" class="form-control" placeholder="Título" required></div>
+                        <div class="col-md-3"><input type="text" id="iArea" class="form-control" placeholder="Área de Estudio" required></div>
+                        <div class="col-md-2">
+                            <select id="iEstado" class="form-select" required>
+                                <option value="En curso">En curso</option>
+                                <option value="Finalizada">Finalizada</option>
+                                <option value="Publicada">Publicada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input type="date" id="iFechaInicio" class="form-control" required></div>
+                        <div class="col-md-2">
+                            <select id="iCientificoSelect" class="form-select" required>
+                                <option value="">Científico...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 offset-md-9"><button type="submit" class="btn btn-info text-white w-100">Guardar Investigación</button></div>
+                    </form>
+                </div>
+                <div class="card p-3 shadow-sm">
+                    <h5>Listado de Investigaciones</h5>
+                    <table class="table table-striped align-middle mt-2">
+                        <thead><tr><th>ID</th><th>Título</th><th>Área</th><th>Estado</th><th>Inicio</th><th>Científico</th><th>Acciones</th></tr></thead>
+                        <tbody id="tablaInvestigaciones"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal para Asignar Especialidad -->
+    <div class="modal fade" id="modalEspecialidad" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Asignar Especialidad</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <input type="hidden" id="modalCientificoId">
+                    <label class="form-label">Seleccione Especialidad:</label>
+                    <select id="modalEspecialidadesSelect" class="form-select"></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarEspecialidadModal()">Asignar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico para Editar Registros -->
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title" id="modalEditarTitulo">Editar Registro</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body" id="modalEditarCuerpo">
+                    <!-- Formulario dinámico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning text-dark fw-bold" onclick="guardarEdicion()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+                const BASE_URL = "https://localhost:7123/api";
+                let cientificosGlobales = [];
+                let especialidadesGlobales = [];
+                let descubrimientosGlobales = [];
+                let investigacionesGlobales = [];
+
+                let modalEspBs = null;
+                let modalEditBs = null;
+                let tipoEdicionActual = "";
+                let idEdicionActual = null;
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    modalEspBs = new bootstrap.Modal(document.getElementById('modalEspecialidad'));
+                    modalEditBs = new bootstrap.Modal(document.getElementById('modalEditar'));
+
+                    // Configurar restricciones de fechas en la interfaz visual
+                    const hoy = new Date().toISOString().split('T')[0];
+                    const hace20Años = new Date();
+                    hace20Años.setFullYear(hace20Años.getFullYear() - 20);
+                    const maxFechaCientifico = hace20Años.toISOString().split('T')[0];
+
+                    if(document.getElementById("cFechaNac")) document.getElementById("cFechaNac").max = maxFechaCientifico;
+                    if(document.getElementById("dFecha")) document.getElementById("dFecha").max = hoy;
+                    if(document.getElementById("iFechaInicio")) document.getElementById("iFechaInicio").max = hoy;
+
+                    cargarTodo();
+                });
+
+                async function cargarTodo() {
+                    await cargarEspecialidades();
+                    await cargarCientificos();
+                    cargarDescubrimientos();
+                    cargarInvestigaciones();
+                }
+
+                async function cargarEspecialidades() {
+                    const res = await fetch(`${BASE_URL}/especialidades`);
+                    especialidadesGlobales = await res.json();
+
+                    document.getElementById("tablaEspecialidades").innerHTML = especialidadesGlobales.map(e => `
+                        <tr><td>${e.id}</td><td>${e.nombre}</td><td>${e.descripcion || '-'}</td></tr>`).join('');
+
+                    document.getElementById("cEspecialidadesSelect").innerHTML = especialidadesGlobales.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+                    document.getElementById("modalEspecialidadesSelect").innerHTML = especialidadesGlobales.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+                }
+
+                async function cargarCientificos() {
+                    const res = await fetch(`${BASE_URL}/cientificos`);
+                    cientificosGlobales = await res.json();
+
+                    document.getElementById("tablaCientificos").innerHTML = cientificosGlobales.map(c => `
+                        <tr>
+                            <td>${c.id}</td>
+                            <td>${c.nombre} ${c.apellido}</td>
+                            <td>${c.nacionalidad}</td>
+                            <td>${c.email}</td>
+                            <td>
+                                <span class="badge bg-info text-dark me-1">${c.especialidades.join(", ") || 'Ninguna'}</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalEspecialidad(${c.id})">+ Esp</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm text-dark me-1" onclick="abrirEditar('cientifico', ${c.id})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="eliminar('cientificos', ${c.id})">Eliminar</button>
+                            </td>
+                        </tr>`).join('');
+
+                    const opcionesCientificos = `<option value="">Seleccione Científico...</option>` +
+                        cientificosGlobales.map(c => `<option value="${c.id}">${c.nombre} ${c.apellido}</option>`).join('');
+
+                    document.getElementById("dCientificoSelect").innerHTML = opcionesCientificos;
+                    document.getElementById("iCientificoSelect").innerHTML = opcionesCientificos;
+                }
+
+                async function cargarDescubrimientos() {
+                    const res = await fetch(`${BASE_URL}/descubrimientos`);
+                    descubrimientosGlobales = await res.json();
+
+                    document.getElementById("tablaDescubrimientos").innerHTML = descubrimientosGlobales.map(d => {
+                        const autor = cientificosGlobales.find(c => c.id === d.cientificoId);
+                        const nombreAutor = autor ? `${autor.nombre} ${autor.apellido}` : `ID: ${d.cientificoId}`;
+                        return `
+                        <tr>
+                            <td>${d.id}</td><td>${d.titulo}</td><td>${d.lugar || '-'}</td>
+                            <td>${new Date(d.fechaDescubrimiento).toLocaleDateString()}</td><td>${nombreAutor}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm text-dark me-1" onclick="abrirEditar('descubrimiento', ${d.id})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="eliminar('descubrimientos', ${d.id})">Eliminar</button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+
+                async function cargarInvestigaciones() {
+                    const res = await fetch(`${BASE_URL}/investigaciones`);
+                    investigacionesGlobales = await res.json();
+
+                    document.getElementById("tablaInvestigaciones").innerHTML = investigacionesGlobales.map(i => {
+                        const autor = cientificosGlobales.find(c => c.id === i.cientificoId);
+                        const nombreAutor = autor ? `${autor.nombre} ${autor.apellido}` : `ID: ${i.cientificoId}`;
+                        return `
+                        <tr>
+                            <td>${i.id}</td><td>${i.titulo}</td><td>${i.areaEstudio}</td>
+                            <td><span class="badge bg-secondary">${i.estado}</span></td>
+                            <td>${new Date(i.fechaInicio).toLocaleDateString()}</td><td>${nombreAutor}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm text-dark me-1" onclick="abrirEditar('investigacion', ${i.id})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="eliminar('investigaciones', ${i.id})">Eliminar</button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+
+                function abrirEditar(tipo, id) {
+                    tipoEdicionActual = tipo;
+                    idEdicionActual = id;
+                    const cuerpo = document.getElementById("modalEditarCuerpo");
+                    const titulo = document.getElementById("modalEditarTitulo");
+
+                    const hoy = new Date().toISOString().split('T')[0];
+                    const hace20Años = new Date();
+                    hace20Años.setFullYear(hace20Años.getFullYear() - 20);
+                    const maxFechaCientifico = hace20Años.toISOString().split('T')[0];
+
+                    if (tipo === 'cientifico') {
+                        const c = cientificosGlobales.find(x => x.id === id);
+                        const fechaFmt = c.fechaNacimiento ? c.fechaNacimiento.split('T')[0] : '';
+                        titulo.innerText = `Editar Científico (#${id})`;
+                        cuerpo.innerHTML = `
+                            <div class="mb-2"><label>Nombre</label><input type="text" id="editNombre" class="form-control" value="${c.nombre}"></div>
+                            <div class="mb-2"><label>Apellido</label><input type="text" id="editApellido" class="form-control" value="${c.apellido}"></div>
+                            <div class="mb-2"><label>Nacionalidad</label><input type="text" id="editNacionalidad" class="form-control" value="${c.nacionalidad}"></div>
+                            <div class="mb-2"><label>Email</label><input type="email" id="editEmail" class="form-control" value="${c.email}"></div>
+                            <div class="mb-2"><label>Fecha Nacimiento</label><input type="date" id="editFechaNac" class="form-control" value="${fechaFmt}" max="${maxFechaCientifico}"></div>
+                        `;
+                    } else if (tipo === 'descubrimiento') {
+                        const d = descubrimientosGlobales.find(x => x.id === id);
+                        const fechaFmt = d.fechaDescubrimiento ? d.fechaDescubrimiento.split('T')[0] : '';
+                        titulo.innerText = `Editar Descubrimiento (#${id})`;
+                        cuerpo.innerHTML = `
+                            <div class="mb-2"><label>Título</label><input type="text" id="editTitulo" class="form-control" value="${d.titulo}"></div>
+                            <div class="mb-2"><label>Lugar</label><input type="text" id="editLugar" class="form-control" value="${d.lugar || ''}"></div>
+                            <div class="mb-2"><label>Fecha</label><input type="date" id="editFecha" class="form-control" value="${fechaFmt}" max="${hoy}"></div>
+                            <div class="mb-2"><label>Descripción</label><input type="text" id="editDesc" class="form-control" value="${d.descripcion || ''}"></div>
+                        `;
+                    } else if (tipo === 'investigacion') {
+                        const i = investigacionesGlobales.find(x => x.id === id);
+                        const fechaFmt = i.fechaInicio ? i.fechaInicio.split('T')[0] : '';
+                        titulo.innerText = `Editar Investigación (#${id})`;
+                        cuerpo.innerHTML = `
+                            <div class="mb-2"><label>Título</label><input type="text" id="editTitulo" class="form-control" value="${i.titulo}"></div>
+                            <div class="mb-2"><label>Área de Estudio</label><input type="text" id="editArea" class="form-control" value="${i.areaEstudio}"></div>
+                            <div class="mb-2"><label>Estado</label>
+                                <select id="editEstado" class="form-select">
+                                    <option value="En curso" ${i.estado === 'En curso' ? 'selected' : ''}>En curso</option>
+                                    <option value="Finalizada" ${i.estado === 'Finalizada' ? 'selected' : ''}>Finalizada</option>
+                                    <option value="Publicada" ${i.estado === 'Publicada' ? 'selected' : ''}>Publicada</option>
+                                </select>
+                            </div>
+                            <div class="mb-2"><label>Fecha Inicio</label><input type="date" id="editFecha" class="form-control" value="${fechaFmt}" max="${hoy}"></div>
+                        `;
+                    }
+                    modalEditBs.show();
+                }
+
+                async function guardarEdicion() {
+                    let res = null;
+                    if (tipoEdicionActual === 'cientifico') {
+                        const dto = {
+                            nombre: document.getElementById("editNombre").value,
+                            apellido: document.getElementById("editApellido").value,
+                            nacionalidad: document.getElementById("editNacionalidad").value,
+                            email: document.getElementById("editEmail").value,
+                            fechaNacimiento: document.getElementById("editFechaNac").value,
+                            especialidadIds: []
+                        };
+                        res = await fetch(`${BASE_URL}/cientificos/${idEdicionActual}`, {
+                            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dto)
+                        });
+                    } else if (tipoEdicionActual === 'descubrimiento') {
+                        const dto = {
+                            titulo: document.getElementById("editTitulo").value,
+                            lugar: document.getElementById("editLugar").value,
+                            fechaDescubrimiento: document.getElementById("editFecha").value,
+                            descripcion: document.getElementById("editDesc").value,
+                            cientificoId: descubrimientosGlobales.find(x => x.id === idEdicionActual).cientificoId
+                        };
+                        res = await fetch(`${BASE_URL}/descubrimientos/${idEdicionActual}`, {
+                            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dto)
+                        });
+                    } else if (tipoEdicionActual === 'investigacion') {
+                        const dto = {
+                            titulo: document.getElementById("editTitulo").value,
+                            areaEstudio: document.getElementById("editArea").value,
+                            estado: document.getElementById("editEstado").value,
+                            fechaInicio: document.getElementById("editFecha").value,
+                            cientificoId: investigacionesGlobales.find(x => x.id === idEdicionActual).cientificoId
+                        };
+                        res = await fetch(`${BASE_URL}/investigaciones/${idEdicionActual}`, {
+                            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dto)
+                        });
+                    }
+
+                    if (res && res.ok) {
+                        modalEditBs.hide();
+                        cargarTodo();
+                    } else if (res) {
+                        const errData = await res.json();
+                        alert("Error de Validación: " + JSON.stringify(errData.errors || errData.title));
+                    }
+                }
+
+                function abrirModalEspecialidad(cientificoId) {
+                    document.getElementById("modalCientificoId").value = cientificoId;
+                    modalEspBs.show();
+                }
+
+                async function guardarEspecialidadModal() {
+                    const cientificoId = document.getElementById("modalCientificoId").value;
+                    const especialidadId = document.getElementById("modalEspecialidadesSelect").value;
+
+                    const res = await fetch(`${BASE_URL}/cientificos/${cientificoId}/especialidades/${especialidadId}`, { method: "POST" });
+                    if (res.ok) {
+                        modalEspBs.hide();
+                        cargarCientificos();
+                    } else {
+                        alert("La especialidad ya está asignada a este científico.");
+                    }
+                }
+
+                // Formularios POST
+                document.getElementById("cientificoForm").onsubmit = async (e) => {
+                    e.preventDefault();
+                    const select = document.getElementById("cEspecialidadesSelect");
+                    const especialidadesSeleccionadas = Array.from(select.selectedOptions).map(opt => parseInt(opt.value));
+
+                    const res = await fetch(`${BASE_URL}/cientificos`, {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            nombre: document.getElementById("cNombre").value,
+                            apellido: document.getElementById("cApellido").value,
+                            nacionalidad: document.getElementById("cNacionalidad").value,
+                            email: document.getElementById("cEmail").value,
+                            fechaNacimiento: document.getElementById("cFechaNac").value,
+                            especialidadIds: especialidadesSeleccionadas
+                        })
+                    });
+
+                    if (res.ok) {
+                        e.target.reset(); cargarTodo();
+                    } else {
+                        const errData = await res.json();
+                        alert("Error de Validación: " + JSON.stringify(errData.errors || errData.title));
+                    }
+                };
+
+                document.getElementById("especialidadForm").onsubmit = async (e) => {
+                    e.preventDefault();
+                    await fetch(`${BASE_URL}/especialidades`, {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            nombre: document.getElementById("eNombre").value,
+                            descripcion: document.getElementById("eDescripcion").value
+                        })
+                    });
+                    e.target.reset(); cargarTodo();
+                };
+
+                document.getElementById("descubrimientoForm").onsubmit = async (e) => {
+                    e.preventDefault();
+                    const res = await fetch(`${BASE_URL}/descubrimientos`, {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            titulo: document.getElementById("dTitulo").value,
+                            lugar: document.getElementById("dLugar").value,
+                            fechaDescubrimiento: document.getElementById("dFecha").value,
+                            cientificoId: parseInt(document.getElementById("dCientificoSelect").value),
+                            descripcion: document.getElementById("dDescripcion").value
+                        })
+                    });
+
+                    if (res.ok) {
+                        e.target.reset(); cargarDescubrimientos();
+                    } else {
+                        const errData = await res.json();
+                        alert("Error de Validación: " + JSON.stringify(errData.errors || errData.title));
+                    }
+                };
+
+                document.getElementById("investigacionForm").onsubmit = async (e) => {
+                    e.preventDefault();
+                    const res = await fetch(`${BASE_URL}/investigaciones`, {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            titulo: document.getElementById("iTitulo").value,
+                            areaEstudio: document.getElementById("iArea").value,
+                            estado: document.getElementById("iEstado").value,
+                            fechaInicio: document.getElementById("iFechaInicio").value,
+                            cientificoId: parseInt(document.getElementById("iCientificoSelect").value)
+                        })
+                    });
+
+                    if (res.ok) {
+                        e.target.reset(); cargarInvestigaciones();
+                    } else {
+                        const errData = await res.json();
+                        alert("Error de Validación: " + JSON.stringify(errData.errors || errData.title));
+                    }
+                };
+
+                async function eliminar(recurso, id) {
+                    if (confirm("¿Deseas eliminar este registro?")) {
+                        await fetch(`${BASE_URL}/${recurso}/${id}`, { method: "DELETE" });
+                        cargarTodo();
+                    }
+                }
+    </script>
+</body>
+</html>
